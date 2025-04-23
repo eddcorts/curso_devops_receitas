@@ -1,0 +1,22 @@
+{
+    // For Poetry package directory recognition
+    "python.defaultInterpreterPath": "${workspaceFolder}/python/.venv/bin/python",
+    "python.terminal.activateEnvironment": true,
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    // mypy configs
+    "mypy.targets": [
+        "python/src",
+    ],
+    "mypy.runUsingActiveInterpreter": true,
+    "mypy.configFile": "python/pyproject.toml",
+    "mypy.dmypyExecutable": "${workspaceFolder}/python/.venv/bin/dmypy",
+    "python.pythonPath": "python/.venv/bin/python",
+    // "python.analysis.extraPaths": [
+    //     "./src"
+    // ],
+    "files.watcherExclude": {
+        ".venv/**": true,
+        ".pytest_cache/**": true,
+        ".mypy_cache/**": true,
+    }
+}
