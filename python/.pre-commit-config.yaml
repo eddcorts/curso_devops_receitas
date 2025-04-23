@@ -33,8 +33,7 @@ repos:
         args: ["--config=python/config/flake8.ini"]
         language: system
         types: [python]
-        include: python/
-        exclude: "python/config/"
+        exclude: "config/"
 
       - id: isort
         name: Sorting imports
