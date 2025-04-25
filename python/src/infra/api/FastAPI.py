@@ -11,11 +11,16 @@ app = FastAPI(
 )
 
 
-app.post("/ingredient/create/", tags=["Ingredient"])(IngredientCRUD.create_ingredient)
+app.post("/ingredient/create", tags=["Ingredient"])(IngredientCRUD.create_ingredient)
 
 
-@app.get("/ingredient/read/", tags=["Ingredient"])  # (IngredientCRUD.read_ingredients)
+@app.get("/ingredient/read", tags=["Ingredient"])
 async def read_ingredients(
     ids: set[IngredientID] = Query(set()),
 ) -> set[Ingredient]:
     return await IngredientCRUD.read_ingredients(ids)
+
+
+app.delete("/ingredient/delete", tags=["Ingredient"])(IngredientCRUD.delete_ingredients)
+
+app.put("/ingredients/update", tags=["Ingredient"])(IngredientCRUD.update_ingredient)

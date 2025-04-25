@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from pydantic import BaseModel
 
-from ..entity.ingredient import Ingredient, IngredientID
+from ..entity.ingredient import Ingredient, IngredientID, StandardIngredientUnitsType
 
 
 class IngredientDataSource(ABC, BaseModel):
@@ -18,7 +18,12 @@ class IngredientDataSource(ABC, BaseModel):
     def create_ingredient(self, ingredient: Ingredient) -> IngredientID: ...
 
     @abstractmethod
-    def update_ingredient(self, updated_ingredient: Ingredient) -> None: ...
+    def update_ingredient(
+        self,
+        id: IngredientID,
+        new_name: IngredientID | None,
+        new_unit: StandardIngredientUnitsType | None,
+    ) -> None: ...
 
     @abstractmethod
     def delete_ingredients(self, ids: set[IngredientID]) -> set[IngredientID]: ...

@@ -1,5 +1,9 @@
 from ...app.data_source.ingredient_data_source import IngredientDataSource
-from ...app.entity.ingredient import Ingredient, IngredientID
+from ...app.entity.ingredient import (
+    Ingredient,
+    IngredientID,
+    StandardIngredientUnitsType,
+)
 
 
 class IngredientLocalDataSource(IngredientDataSource):
@@ -22,13 +26,39 @@ class IngredientLocalDataSource(IngredientDataSource):
         self.ingredients.add(ingredient)
         return ingredient.name
 
-    def update_ingredient(self, updated_ingredient: Ingredient) -> None: ...
+    def update_ingredient(
+        self,
+        id: IngredientID,
+        new_name: IngredientID | None,
+        new_unit: StandardIngredientUnitsType | None,
+    ) -> None:
+
+        try:
+            current_ingredient = self.read_ingredients(
+                {
+                    id,
+                }
+            ).pop()
+        except KeyError:
+            raise ValueError(f"No ingredients found with given ID {id}")
+
+        self.delete_ingredients(
+            {
+                id,
+            }
+        )
+        self.create_ingredient(
+            Ingredient(
+                name=new_name or current_ingredient.name,
+                standard_unit=new_unit or current_ingredient.standard_unit,
+            )
+        )
 
     def delete_ingredients(self, ids: set[IngredientID]) -> set[IngredientID]:
         ingredients = self.read_ingredients(ids)
 
         if len(ingredients) == 0:
-            raise ValueError("No ingredients found with given IDs")
+            raise ValueError(f"No ingredients found with given IDs {ids}")
 
         self.ingredients -= ingredients
 
