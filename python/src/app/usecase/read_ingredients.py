@@ -4,11 +4,11 @@ from ..data_source.ingredient_data_source import IngredientDataSource
 from ..entity.ingredient import Ingredient, IngredientID
 
 
-class CreateIngredient(BaseModel):
-    """Create one ingredient"""
+class ReadIngredients(BaseModel):
+    """Read one or more ingredients"""
 
     ingredient_data_source: IngredientDataSource
 
-    def execute(self, ingredient: Ingredient) -> IngredientID:
+    def execute(self, ids: set[IngredientID]) -> set[Ingredient]:
         """Run main class purpose"""
-        return self.ingredient_data_source.create_ingredient(ingredient)
+        return self.ingredient_data_source.read_ingredients(set(ids))

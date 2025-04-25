@@ -7,4 +7,4 @@ class BaseModel(pydantic.BaseModel):
     class Config:
         """Config class"""
 
-        orm_mode = True
+        from_attributes = True

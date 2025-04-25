@@ -5,9 +5,10 @@ description = ""
 authors = [{ name = "eddcorts", email = "edfmcortes@gmail.com" }]
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = ["fastapi (>=0.115.12,<0.116.0)", "pydantic (>=2.11.3,<3.0.0)"]
 
-[tool.poetry]
+[tool.poetry.dependencies]
+fastapi = { extras = ["standard"], version = "^0.115.12" }
+pydantic = "^2.11.3"
 
 [tool.poetry.group.dev.dependencies]
 black = "^25.1.0"
@@ -31,6 +32,7 @@ build-backend = "poetry.core.masonry.api"
 
 
 [tool.poe.tasks]
+start = { cmd = "poetry run fastapi dev src/infra/api/FastAPI.py --host=0.0.0.0 --port=8888", help = "Start FastAPI server" }
 pre_commit = { cmd = "poetry run pre-commit run", help = "Run pre-commit check in staged files" }
 pre_commit_all = { cmd = "poetry run pre-commit run --all-files", help = "Run pre-commit check in all files" }
 pre_commit_setup = { cmd = "poetry run pre-commit install --overwrite", help = "Install pre-commit hooks" }
