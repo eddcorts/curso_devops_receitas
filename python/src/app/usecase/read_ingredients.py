@@ -9,6 +9,6 @@ class ReadIngredients(BaseModel):
 
     ingredient_data_source: IngredientDataSource
 
-    def execute(self, ids: set[IngredientID]) -> set[Ingredient]:
+    def execute(self, ids: set[IngredientID] | None = None) -> set[Ingredient]:
         """Run main class purpose"""
-        return self.ingredient_data_source.read_ingredients(set(ids))
+        return self.ingredient_data_source.read_ingredients(ids or set())
