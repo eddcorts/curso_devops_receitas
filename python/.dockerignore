@@ -1,0 +1,24 @@
+# VSCode local settings
+.vscode
+config
+docs
+
+# Python build files and settings
+**/__pycache__
+**/*.pyc
+**/.pytest_cache
+**/.mypy_cache
+**/.mypy_report
+**/.ipynb_checkpoints
+.venv/
+
+# Test and run files
+**/*.log
+**/*.csv
+**/*.zip
+
+# Git files
+**/.git
+**/.gitignore
+README.md
+.github

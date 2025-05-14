@@ -3,12 +3,13 @@ name = "curso-devops"
 version = "0.1.0"
 description = ""
 authors = [{ name = "eddcorts", email = "edfmcortes@gmail.com" }]
-readme = "README.md"
+readme = ""
 requires-python = ">=3.13"
 
 [tool.poetry.dependencies]
 fastapi = { extras = ["standard"], version = "^0.115.12" }
 pydantic = "^2.11.3"
+poethepoet = "^0.34.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^25.1.0"
@@ -23,7 +24,6 @@ isort = "^6.0.1"
 mypy = "^1.15.0"
 pep8-naming = "^0.14.1"
 pre-commit = "^4.2.0"
-poethepoet = "^0.34.0"
 
 
 [build-system]

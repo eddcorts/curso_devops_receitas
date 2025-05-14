@@ -1,26 +1,20 @@
-from fastapi import FastAPI, Query
+from fastapi import FastAPI
 
-from ...app.entity.ingredient import (
-    Ingredient,
-    IngredientID,
-)
 from ..controller.ingredient_crud import IngredientCRUD
 from ..controller.recipee_crud import RecipeeCRUD
 
-app = FastAPI(
-    title="Ingredientes e Receitas",
-)
+app = FastAPI(title="Ingredientes e Receitas", root_path="/python")
+
+
+@app.get("/health")
+async def health() -> bool:
+    return True
 
 
 app.post("/ingredient/create", tags=["Ingredient"])(IngredientCRUD.create_ingredient)
 
 
 app.get("/ingredient/read", tags=["Ingredient"])(IngredientCRUD.read_ingredients)
-# async def read_ingredients(
-#     ids: set[IngredientID] = Query(set()),
-# ) -> set[Ingredient]:
-#     return await IngredientCRUD.read_ingredients(ids)
-
 
 app.delete("/ingredient/delete", tags=["Ingredient"])(IngredientCRUD.delete_ingredients)
 
