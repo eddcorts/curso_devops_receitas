@@ -36,7 +36,7 @@ RUN poetry install --without dev --no-root
 # ---------------------------------------------------------
 FROM python-base
 
-RUN addgroup --system app && adduser --no-create-home --system --group app
+RUN adduser --no-create-home --system --group app
 USER app
 
 # Copying poetry and venv into image
