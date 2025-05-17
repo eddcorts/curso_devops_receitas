@@ -36,13 +36,15 @@ RUN poetry install --without dev --no-root
 # ---------------------------------------------------------
 FROM python-base
 
+RUN addgroup --system app && adduser --no-create-home --system --group app
+USER app
+
 # Copying poetry and venv into image
 COPY --from=builder-base $POETRY_HOME $POETRY_HOME
 COPY --from=builder-base $PYSETUP_PATH $PYSETUP_PATH
 
 # Copying in our entrypoint
 COPY /docker-entrypoint.sh /docker-entrypoint.sh
-# RUN chmod +x /docker-entrypoint.sh
 
 WORKDIR $PYSETUP_PATH
 RUN poetry install --without dev --no-root
