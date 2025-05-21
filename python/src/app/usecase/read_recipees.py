@@ -9,6 +9,6 @@ class ReadRecipees(BaseModel):
 
     recipee_data_source: RecipeeDataSource
 
-    def execute(self, ids: set[RecipeeID]) -> list[Recipee]:
+    def execute(self, ids: set[RecipeeID] | None) -> list[Recipee]:
         """Run main class purpose"""
-        return self.recipee_data_source.get_recipees(ids)
+        return self.recipee_data_source.get_recipees(ids or set())

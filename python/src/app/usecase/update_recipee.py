@@ -32,14 +32,22 @@ class UpdateRecipee(BaseModel):
         ):
             raise ValueError("At least one field should be supplied")
 
+        new_ingredients_ids = {
+            ingredient.ingredient_id for ingredient in new_ingredients or set()
+        }
+        if len((remove_ingredients or set()).intersection(new_ingredients_ids)) > 0:
+            raise ValueError(
+                "Shouldn't remove and add the same ingredient at the same time"
+            )
+
         # TODO: transform into a usecase
         existing_ingredients_ids = {
             ingredient.name for ingredient in existing_ingredients
         }
 
-        possibly_not_existing_ids = set(
-            new_ingredient.name for new_ingredient in (new_ingredients or set())
-        ).difference(existing_ingredients_ids)
+        possibly_not_existing_ids = new_ingredients_ids.difference(
+            existing_ingredients_ids
+        )
         if len(possibly_not_existing_ids) > 0:
             raise ValueError(
                 f"Some ingredients IDs passed don't exist: {possibly_not_existing_ids}"

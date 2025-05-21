@@ -5,7 +5,7 @@ from ...app.entity.recipee import TIME_UNIT_TYPE, Recipee, RecipeeID, RecipeeIng
 
 class RecipeeLocalDataSource(RecipeeDataSource):
 
-    recipees: list[Recipee] = list()
+    recipees: list[Recipee] = []
 
     def get_recipees(self, ids: set[RecipeeID]) -> list[Recipee]:
         """Get recipees with given ID. If no ID is provided, then get all recipees."""
@@ -42,7 +42,7 @@ class RecipeeLocalDataSource(RecipeeDataSource):
         updated_ingredients = {
             ingredient
             for ingredient in (current_recipee.ingredients | new_ingredients)
-            if ingredient.name not in (remove_ingredients)
+            if ingredient.ingredient_id not in remove_ingredients
         }
 
         current_recipee_idx = self.recipees.index(current_recipee)
@@ -77,7 +77,7 @@ class RecipeeLocalDataSource(RecipeeDataSource):
             current_ingredient = next(
                 ingredient
                 for ingredient in recipee.ingredients
-                if ingredient.name == ingredient_id
+                if ingredient.ingredient_id == ingredient_id
             )
         except StopIteration:
             raise ValueError(

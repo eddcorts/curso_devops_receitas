@@ -3,15 +3,16 @@ from typing import Literal
 from pydantic import Field
 
 from .base import BaseModel
-from .ingredient import Ingredient, StandardIngredientUnitsType
+from .ingredient import IngredientID, StandardIngredientUnitsType
 
 type RecipeeID = str
 type TIME_UNIT_TYPE = Literal["segundo", "minuto", "hora", "dia"] | str
 
 
-class RecipeeIngredient(Ingredient):
+class RecipeeIngredient(BaseModel):
     """The instance of the ingredient of one recipee with general specifications"""
 
+    ingredient_id: IngredientID
     specification: str = Field(
         description="A specification for the ingredient (e.g. fatness, ripeness, branding etc.)"
     )
@@ -22,6 +23,10 @@ class RecipeeIngredient(Ingredient):
         None,
         description="The actual unit to be used for this recipee. Leave empty to use the standard unit of the ingredient.",
     )
+
+    def __hash__(self) -> int:
+        """A hash function so the ingredient can be in a unique set"""
+        return hash(self.ingredient_id)
 
 
 class Recipee(BaseModel):

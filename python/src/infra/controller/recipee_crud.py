@@ -28,7 +28,7 @@ class RecipeeCRUD:
         return create_recipee.execute(recipee, read_ingredients.execute())
 
     @staticmethod
-    async def read_recipees(ids: set[RecipeeID]) -> list[Recipee]:
+    async def read_recipees(ids: set[RecipeeID] | None = None) -> list[Recipee]:
         read_recipees = ReadRecipees(recipee_data_source=recipee_data_source)
 
         return read_recipees.execute(ids)
