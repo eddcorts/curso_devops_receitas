@@ -4,10 +4,13 @@ on:
   pull_request:
     branches:
       - main
+  issue_comment: 
+    types: [created]
 
 jobs:
   lint_python:
     runs-on: ubuntu-latest
+    if: ${{ github.event.issue.pull_request }}
     defaults:
       run:
         shell: bash
