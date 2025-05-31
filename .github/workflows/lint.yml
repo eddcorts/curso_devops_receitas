@@ -10,7 +10,7 @@ on:
 jobs:
   lint_python:
     runs-on: ubuntu-latest
-    if: ${{ github.event.issue.pull_request }}
+    # if: ${{ github.event.issue.pull_request }}
     defaults:
       run:
         shell: bash
@@ -34,7 +34,7 @@ jobs:
         run: poetry install --with dev --no-root
       
       - name: Linting
-        run: poe pre_commit_all
+        run: poetry run poe pre_commit_all
       
             
 
