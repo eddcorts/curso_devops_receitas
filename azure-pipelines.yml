@@ -6,3 +6,9 @@ jobs:
     steps:
       - checkout: self
         fetchDepth: "0"
+
+      # configuraçao e linguagem
+
+      # instalar dependencias
+
+      # lint
