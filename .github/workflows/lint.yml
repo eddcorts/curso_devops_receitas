@@ -1,0 +1,37 @@
+name: Lint Project
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint_python:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./python
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Installs Poetry
+        run: pipx install poetry
+
+      # Language configuration
+      - name: Install Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: poetry
+
+      - name: Install dependencies
+        run: poetry install --with-dev --no-root
+      
+      - name: Linting
+        run: poe pre_commit_all
+      
+            
+
