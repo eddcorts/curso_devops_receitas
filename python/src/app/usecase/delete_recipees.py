@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 from ..data_source.recipee_data_source import RecipeeDataSource
-from ..entity.recipee import Recipee, RecipeeID
+from ..entity.recipee import RecipeeID
 
 
 class DeleteRecipees(BaseModel):
