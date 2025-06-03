@@ -29,5 +29,5 @@ jobs:
         with:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/curso_devops_api_receitas_python:${{ github.event.client_payload.tag }}
-          file: ./Dockerfile
-          context: python
+          # file: ./Dockerfile
+          # context: python
