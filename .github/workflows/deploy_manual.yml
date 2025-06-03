@@ -1,0 +1,31 @@
+name: Deploy Tag (manually)
+
+on:
+  repository_dispatch:
+    types: [manual_deploy]
+
+jobs:
+  deploy_python:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        # working-directory: ./python
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: "${{ github.event.client_payload.tag }}"
+          fetch-depth: 0
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/curso_devops_api_receitas_python:"${{ github.event.client_payload.tag }}"
