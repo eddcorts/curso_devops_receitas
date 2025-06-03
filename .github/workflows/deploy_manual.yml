@@ -10,7 +10,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        # working-directory: ./python
+        working-directory: ./python
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
