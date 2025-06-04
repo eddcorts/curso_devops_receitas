@@ -1,8 +1,12 @@
 name: Deploy Tag (manually)
 
 on:
-  repository_dispatch:
-    types: [manual_deploy]
+  workflow_dispatch:
+    inputs:
+      tag:
+        required: true
+        description: The repository tag reference to be deployed
+        type: string
 
 jobs:
   deploy_python:
@@ -11,11 +15,15 @@ jobs:
       run:
         shell: bash
         working-directory: ./python
+    
+    env:
+      IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/curso_devops_api_receitas_python:${{ inputs.tag }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: "${{ github.event.client_payload.tag }}"
+          ref: "${{ inputs.tag }}"
           fetch-depth: 0
 
       - name: Login to Docker Hub
@@ -27,11 +35,9 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and push image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/curso_devops_api_receitas_python:${{ github.event.client_payload.tag }}
+      - name: Build image
+        run: docker build -t ${{ env.IMAGE_NAME }} --file Dockerfile .
+      
+      - name: Push image
+        run: docker push ${{ env.IMAGE_NAME }}
           
