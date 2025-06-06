@@ -23,21 +23,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: "${{ inputs.tag }}"
+          ref: ${{ inputs.tag }}
           fetch-depth: 0
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-
-      - name: Build image
-        run: docker build -t ${{ env.IMAGE_NAME }} --file Dockerfile .
-      
-      - name: Push image to DockerHub
-        run: docker push ${{ env.IMAGE_NAME }}
+      - name: Verify tag existence
+        # The checkout step can still work if for some reason there is a branch with said name
+        run: |
+            if git show-ref --tags --verify --quiet "refs/tags/${{ inputs.tag }}"; then
+                echo Tag exists
+            else
+                echo Tag not found. Input a tag that exists.
+                exit 1
+            fi
           
       - name: Deploy to azure
         uses: azure/webapps-deploy@v2
