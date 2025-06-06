@@ -1,0 +1,51 @@
+name: Deploy Tag
+
+on:
+  push:
+    tags: ["v*"]
+    branches: [main]
+
+jobs:
+  deploy_python:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./python
+
+    env:
+      IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/curso_devops_api_receitas_python:${{ github.ref_name }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set docker metadata
+        id: metadata
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/curso_devops_api_receitas_python
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build image
+        run: docker build -t ${{ env.IMAGE_NAME }} --file Dockerfile .
+      
+      - name: Push image
+        run: docker push ${{ env.IMAGE_NAME }}
+          
+      - name: Deploy to azure
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: eddcorts-gh-actions-python
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          images: ${{ env.IMAGE_NAME }}
+
