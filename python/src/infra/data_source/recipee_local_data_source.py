@@ -1,6 +1,10 @@
 from ...app.data_source.recipee_data_source import RecipeeDataSource
 from ...app.entity.ingredient import IngredientID, StandardIngredientUnitsType
 from ...app.entity.recipee import TIME_UNIT_TYPE, Recipee, RecipeeID, RecipeeIngredient
+from ...app.errors.custom_error import (
+    IdentifierAlreadyExistsError,
+    IdentifierNotFoundError,
+)
 
 
 class RecipeeLocalDataSource(RecipeeDataSource):
@@ -16,7 +20,7 @@ class RecipeeLocalDataSource(RecipeeDataSource):
 
     def create_recipee(self, recipee: Recipee) -> RecipeeID:
         if recipee.name in (recipee.name for recipee in self.recipees):
-            raise ValueError(f'recipee with name "{recipee.name}" already exists.')
+            raise IdentifierAlreadyExistsError
 
         self.recipees.append(recipee)
         return recipee.name
@@ -37,7 +41,7 @@ class RecipeeLocalDataSource(RecipeeDataSource):
                 recipee for recipee in self.recipees if recipee.name in id
             )
         except StopIteration:
-            raise ValueError(f"No recipees found with given ID {id}")
+            raise IdentifierNotFoundError
 
         updated_ingredients = {
             ingredient
@@ -71,7 +75,7 @@ class RecipeeLocalDataSource(RecipeeDataSource):
                 }
             )[0]
         except IndexError:
-            raise ValueError(f"No recipee found with given ID {recipee_id}")
+            raise IdentifierNotFoundError
 
         try:
             current_ingredient = next(
@@ -80,7 +84,7 @@ class RecipeeLocalDataSource(RecipeeDataSource):
                 if ingredient.ingredient_id == ingredient_id
             )
         except StopIteration:
-            raise ValueError(
+            raise IdentifierNotFoundError(
                 f"No ingredient found with given ID {ingredient_id} in recipee {recipee_id}"
             )
 
@@ -96,7 +100,7 @@ class RecipeeLocalDataSource(RecipeeDataSource):
         recipees = self.get_recipees(ids)
 
         if len(recipees) == 0:
-            raise ValueError(f"No recipees found with given IDs {ids}")
+            raise IdentifierNotFoundError
 
         recipees_indexes = sorted(
             [self.recipees.index(recipee) for recipee in recipees], reverse=True

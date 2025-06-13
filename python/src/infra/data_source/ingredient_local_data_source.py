@@ -4,6 +4,10 @@ from ...app.entity.ingredient import (
     IngredientID,
     StandardIngredientUnitsType,
 )
+from ...app.errors.custom_error import (
+    IdentifierAlreadyExistsError,
+    IdentifierNotFoundError,
+)
 
 
 class IngredientLocalDataSource(IngredientDataSource):
@@ -19,7 +23,7 @@ class IngredientLocalDataSource(IngredientDataSource):
 
     def create_ingredient(self, ingredient: Ingredient) -> IngredientID:
         if ingredient.name in (ingredient.name for ingredient in self.ingredients):
-            raise ValueError(
+            raise IdentifierAlreadyExistsError(
                 f'Ingredient with name "{ingredient.name}" already exists.'
             )
 
@@ -40,7 +44,7 @@ class IngredientLocalDataSource(IngredientDataSource):
                 }
             ).pop()
         except KeyError:
-            raise ValueError(f"No ingredients found with given ID {id}")
+            raise IdentifierNotFoundError(f"No ingredients found with given ID {id}")
 
         self.delete_ingredients(
             {
@@ -58,7 +62,7 @@ class IngredientLocalDataSource(IngredientDataSource):
         ingredients = self.read_ingredients(ids)
 
         if len(ingredients) == 0:
-            raise ValueError(f"No ingredients found with given IDs {ids}")
+            raise IdentifierNotFoundError(f"No ingredients found with given IDs {ids}")
 
         self.ingredients -= ingredients
 
