@@ -8,8 +8,13 @@ from ...app.entity.ingredient import (
 from ...app.entity.recipee import TIME_UNIT_TYPE, Recipee, RecipeeID, RecipeeIngredient
 from ..controller.ingredient_crud import IngredientCRUD
 from ..controller.recipee_crud import RecipeeCRUD
+from .FastAPIErrorHandler import add_error_handlers
+from .observability import apply_observability_on_app
 
 app = FastAPI(title="Ingredientes e Receitas", root_path="/python")
+
+add_error_handlers(app)
+apply_observability_on_app(app)
 
 
 @app.get("/health")

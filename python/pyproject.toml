@@ -10,6 +10,8 @@ requires-python = ">=3.13"
 fastapi = { extras = ["standard"], version = "^0.115.12" }
 pydantic = "^2.11.3"
 poethepoet = "^0.34.0"
+python-logging-loki = "^0.3.1"
+prometheus-client = "^0.22.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^25.1.0"
